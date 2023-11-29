@@ -1,5 +1,8 @@
 'use client';
 
+import { MoreHorizontal, X } from 'lucide-react';
+import { toast } from 'sonner';
+
 import { deleteBoard } from '@/actions/delete-board';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,8 +12,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useAction } from '@/hooks/use-action';
-import { MoreHorizontal, X } from 'lucide-react';
-import { toast } from 'sonner';
 
 interface BoardOptionsProps {
   id: string;
@@ -24,14 +25,13 @@ export const BoardOptions = ({ id }: BoardOptionsProps) => {
   });
 
   const onDelete = () => {
-    execute({
-      id,
-    });
+    execute({ id });
   };
+
   return (
     <Popover>
-      <PopoverTrigger>
-        <Button className='h-auto w-auto p-2' variant={'transparent'}>
+      <PopoverTrigger asChild>
+        <Button className='h-auto w-auto p-2' variant='transparent'>
           <MoreHorizontal className='h-4 w-4' />
         </Button>
       </PopoverTrigger>
@@ -41,14 +41,14 @@ export const BoardOptions = ({ id }: BoardOptionsProps) => {
         </div>
         <PopoverClose asChild>
           <Button
-            className='h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600 '
-            variant={'ghost'}
+            className='h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600'
+            variant='ghost'
           >
             <X className='h-4 w-4' />
           </Button>
         </PopoverClose>
         <Button
-          variant={'ghost'}
+          variant='ghost'
           onClick={onDelete}
           disabled={isLoading}
           className='rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm'
