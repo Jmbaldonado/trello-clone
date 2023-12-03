@@ -1,8 +1,10 @@
 'use server';
 
+import { createAuditLog } from '@/lib/create-audit-log';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs';
+import { ACTION, ENTITY_TYPE } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import { CreateList } from './schema';
 import { InputType, ReturnType } from './types';
@@ -51,6 +53,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         boardId,
         order: newOrder,
       },
+    });
+
+    await createAuditLog({
+      entityId: list.id,
+      entityTitle: list.title,
+      entityType: ENTITY_TYPE.LIST,
+      action: ACTION.CREATE,
     });
   } catch (error) {
     return {

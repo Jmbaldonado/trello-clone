@@ -28,7 +28,7 @@ export const BoardList = async () => {
         <User2 className='h-6 w-6 mr-2' />
         Your boards
       </div>
-      <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4'>
         {boards.map(board => (
           <Link
             key={board.id}
