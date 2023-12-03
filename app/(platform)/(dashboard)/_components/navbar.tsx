@@ -1,11 +1,13 @@
 import { FormPopover } from '@/components/form/form-popover';
 import Logo from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { OrganizationSwitcher, UserButton } from '@clerk/nextjs';
+import { isAdmin } from '@/lib/admin';
+import { OrganizationSwitcher, UserButton, auth } from '@clerk/nextjs';
 import { Plus } from 'lucide-react';
 import { MobileSidebar } from './mobile-sidebar';
 
 const Navbar = () => {
+  const { userId } = auth();
   return (
     <nav className='fixed z-50 top-0 px-4 w-full h-14 border-b shadow:sm bg-white flex items-center'>
       <MobileSidebar />
@@ -33,21 +35,23 @@ const Navbar = () => {
         </FormPopover>
       </div>
       <div className='ml-auto flex items-center gap-x-2'>
-        <OrganizationSwitcher
-          hidePersonal
-          afterCreateOrganizationUrl={'/organization/:id'}
-          afterLeaveOrganizationUrl='/select-org'
-          afterSelectOrganizationUrl={'/organization/:id'}
-          appearance={{
-            elements: {
-              rootBox: {
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
+        {isAdmin(userId) && (
+          <OrganizationSwitcher
+            hidePersonal
+            afterCreateOrganizationUrl={'/organization/:id'}
+            afterLeaveOrganizationUrl='/select-org'
+            afterSelectOrganizationUrl={'/organization/:id'}
+            appearance={{
+              elements: {
+                rootBox: {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        )}
         <UserButton
           afterSignOutUrl='/'
           appearance={{
