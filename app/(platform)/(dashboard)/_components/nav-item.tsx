@@ -7,7 +7,9 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { isAdmin } from '@/lib/admin';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@clerk/nextjs';
 import { Activity, Layout, Settings } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -32,6 +34,7 @@ export const NavItem = ({
 }: NavItemProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const { userId } = useAuth();
 
   const routes = [
     {
@@ -44,17 +47,15 @@ export const NavItem = ({
       icon: <Activity className='h-4 w-4 mr-2' />,
       href: `/organization/${organization.id}/activity`,
     },
-    {
+  ];
+
+  if (isAdmin(userId)) {
+    routes.push({
       label: 'Settings',
       icon: <Settings className='h-4 w-4 mr-2' />,
       href: `/organization/${organization.id}/settings`,
-    },
-    // {
-    //   label: 'Billing',
-    //   icon: <CreditCard className='h-4 w-4 mr-2' />,
-    //   href: `/organization/${organization.id}/billing`,
-    // },
-  ];
+    });
+  }
 
   const onClick = (href: string) => {
     router.push(href);
